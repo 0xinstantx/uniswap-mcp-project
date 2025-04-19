@@ -1,0 +1,19 @@
+# Foundry-specific ignores
+.forge-snapshots/
+cache/
+out/
+lib/
+
+# MCP server-specific ignores
+.env
+*.secret
+*.key
+node_modules/
+dist/
+build/
+
+# General ignores
+.DS_Store
+*.log
+.vscode/
+.idea/
