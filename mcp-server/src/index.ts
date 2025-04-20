@@ -116,7 +116,7 @@ server.tool(
     "Swap ETH for USDC using UniV3 on the local fork",
     {
         recipient: z.string().describe("Address to receive USDC"),
-        amountIn: z.string().describe("Amount of ETH to swap"),
+        amountEth: z.string().describe("Amount of ETH to swap"),
     },
     async ({ recipient, amountEth }) => {
         try {
