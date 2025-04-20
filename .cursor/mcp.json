@@ -1,8 +1,8 @@
 {
     "mcpServers": {
-        "server-name": {
+        "uniswap-local-fork": {
             "command": "node",
-            "args": ["mcp-server/dist/index.js"]
+            "args": ["sandbox/monad/uniswap-mcp-project/mcp-server/dist/index.js"]
         }
     }
 }
