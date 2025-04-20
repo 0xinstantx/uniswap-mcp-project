@@ -1,8 +1,0 @@
-{
-    "mcpServers": {
-        "uniswap-local-fork": {
-            "command": "node",
-            "args": ["sandbox/monad/uniswap-mcp-project/mcp-server/dist/index.js"]
-        }
-    }
-}
