@@ -15,6 +15,7 @@
     "zod": "^3.24.3"
   },
   "devDependencies": {
+    "@modelcontextprotocol/inspector": "^0.10.2",
     "@types/node": "^22.14.1",
     "ts-node": "^10.9.2"
   }

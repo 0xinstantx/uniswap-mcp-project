@@ -15,7 +15,7 @@ import { mainnet } from "viem/chains";
 // Define a custom chain for the local fork
 const localFork = {
     ...mainnet,
-    id: 31337,
+    id: 1,
     rpcUrls: {
         default: {
             http: ["http://localhost:8545"],
@@ -44,12 +44,12 @@ const swapRouterAbi = [
                 components: [
                     { name: "tokenIn", type: "address" },
                     { name: "tokenOut", type: "address" },
-                    { name: "fee", type: "uint256" },
+                    { name: "fee", type: "uint24" },
                     { name: "recipient", type: "address" },
                     { name: "deadline", type: "uint256" },
                     { name: "amountIn", type: "uint256" },
                     { name: "amountOutMinimum", type: "uint256" },
-                    { name: "sqrtPriceLimitX96", type: "uint256" },
+                    { name: "sqrtPriceLimitX96", type: "uint160" },
                 ],
                 name: "exactInputSingle",
                 type: "tuple",
@@ -109,7 +109,6 @@ server.tool(
         }
     }
 );
-
 // Tool 2: Swap ETH for USDC
 server.tool(
     "swap_eth_for_usdc",
@@ -142,6 +141,11 @@ server.tool(
             await publicClient.waitForTransactionReceipt({ hash: approveTx });
 
             // Step 3: Swap ETH for USDC
+            const block = await publicClient.getBlock();
+            const blockTimestamp = Number(block.timestamp);
+            const deadlineOffset = 1000;
+            const deadline = BigInt(blockTimestamp + deadlineOffset);
+            console.log("Deadline:", deadline);
             const swapTx = await walletClient.writeContract({
                 address: "0xE592427A0AEce92De3Edee1F18E0157C05861564",
                 abi: swapRouterAbi,
@@ -149,9 +153,9 @@ server.tool(
                 args: [{
                     tokenIn: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
                     tokenOut: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
-                    fee: BigInt(3000),
+                    fee: 3000,
                     recipient: recipient as `0x${string}`,
-                    deadline: BigInt(Math.floor(Date.now() / 1000) + 1000),
+                    deadline,
                     amountIn,
                     amountOutMinimum: BigInt(0),
                     sqrtPriceLimitX96: BigInt(0),
@@ -184,6 +188,7 @@ server.tool(
                         }`,
                     },
                 ],
+                isError: true,
             };
         }
     }
@@ -194,6 +199,16 @@ async function main() {
     const transport = new StdioServerTransport();
     await server.connect(transport);
     console.error("Uniswap MCP Server running on stdio");
+    
+    // Add debug logging for incoming messages
+    process.stdin.on('data', (data) => {
+        console.error('Received input:', data.toString());
+    });
+    
+    // Add debug logging for outgoing messages
+    process.stdout.on('data', (data) => {
+        console.error('Sending output:', data.toString());
+    });
 }
 
 main().catch((error) => {
