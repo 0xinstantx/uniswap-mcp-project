@@ -2,9 +2,11 @@
   "name": "mcp-server",
   "version": "0.0.1",
   "description": "MCP Server",
-  "main": "index.ts",
+  "main": "dist/index.js",
   "scripts": {
-    "start": "node index.ts"
+    "start": "node dist/index.js",
+    "build": "tsc",
+    "dev": "ts-node src/index.ts"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.10.1",
@@ -13,6 +15,7 @@
     "zod": "^3.24.3"
   },
   "devDependencies": {
-    "@types/node": "^22.14.1"
+    "@types/node": "^22.14.1",
+    "ts-node": "^10.9.2"
   }
 }
